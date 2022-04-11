@@ -18,4 +18,20 @@ class Database {
 
         return self::$connection;
     } 
+
+    public static function startTransaction() {
+        self::$connection->beginTransaction();
+    }
+
+    public static function commit() {
+        self::$connection->commit();
+    }
+
+    public static function rollback() {
+        self::$connection->rollBack();
+    }
+
+    public static function close() {
+        self::$connection = null;
+    }
 }

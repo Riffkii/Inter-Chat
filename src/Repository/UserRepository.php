@@ -4,7 +4,7 @@ namespace Web\InterChat\Repository;
 use PDO;
 use Web\InterChat\Model\Database\User;
 
-class UserRepository implements Repository{
+class UserRepository {
 
     public function __construct(private PDO $connection) {}
 
