@@ -6,6 +6,7 @@ use Web\InterChat\Util\Database;
 use Web\InterChat\Model\Request\UserRegisterRequest;
 use PHPUnit\Framework\TestCase;
 use Web\InterChat\Exception\ValidationException;
+use Web\InterChat\Model\Request\UserLoginRequest;
 
 class UserServiceTest extends TestCase{
 
@@ -39,7 +40,7 @@ class UserServiceTest extends TestCase{
         $request->setName('admin');
         $request->setPassword('123');
 
-        $response = $this->userService->register($request);
+        $this->userService->register($request);
     }
 
     public function testRegisterNameBlank() {
@@ -49,7 +50,7 @@ class UserServiceTest extends TestCase{
         $request->setName('');
         $request->setPassword('123');
 
-        $response = $this->userService->register($request);
+        $this->userService->register($request);
     }
 
     public function testRegisterPasswordBlank() {
@@ -59,7 +60,7 @@ class UserServiceTest extends TestCase{
         $request->setName('admin');
         $request->setPassword('');
 
-        $response = $this->userService->register($request);
+        $this->userService->register($request);
     }
 
     public function testRegisterExist() {
@@ -69,7 +70,96 @@ class UserServiceTest extends TestCase{
         $request->setName('admin');
         $request->setPassword('123');
 
-        $response = $this->userService->register($request);
-        $response = $this->userService->register($request);
+        $this->userService->register($request);
+        $this->userService->register($request);
+    }
+
+    public function testLoginSuccess() {
+        $register = new UserRegisterRequest();
+        $register->setUsername('admin');
+        $register->setName('admin');
+        $register->setPassword('123');
+        $this->userService->register($register);
+
+        $login = new UserLoginRequest();
+        $login->setUsername('admin');
+        $login->setPassword('123');
+        $response = $this->userService->login($login);
+
+        $this->assertSame($register->getUsername(), $response->getUser()->getUsername());
+        $this->assertSame($register->getName(), $response->getUser()->getName());
+        $this->assertTrue(password_verify($register->getPassword(), $response->getUser()->getPassword()));
+    }
+
+    public function testLoginUsernameBlank() {
+        $this->expectException(ValidationException::class);
+        $register = new UserRegisterRequest();
+        $register->setUsername('admin');
+        $register->setName('admin');
+        $register->setPassword('123');
+        $this->userService->register($register);
+
+        $login = new UserLoginRequest();
+        $login->setUsername('');
+        $login->setPassword('123');
+        $response = $this->userService->login($login);
+
+        $this->assertSame($register->getUsername(), $response->getUser()->getUsername());
+        $this->assertSame($register->getName(), $response->getUser()->getName());
+        $this->assertTrue(password_verify($register->getPassword(), $response->getUser()->getPassword()));
+    }
+
+    public function testLoginPasswordBlank() {
+        $this->expectException(ValidationException::class);
+        $register = new UserRegisterRequest();
+        $register->setUsername('admin');
+        $register->setName('admin');
+        $register->setPassword('123');
+        $this->userService->register($register);
+
+        $login = new UserLoginRequest();
+        $login->setUsername('admin');
+        $login->setPassword('');
+        $response = $this->userService->login($login);
+
+        $this->assertSame($register->getUsername(), $response->getUser()->getUsername());
+        $this->assertSame($register->getName(), $response->getUser()->getName());
+        $this->assertTrue(password_verify($register->getPassword(), $response->getUser()->getPassword()));
+    }
+
+    public function testLoginUserNotExist() {
+        $this->expectException(ValidationException::class);
+        $register = new UserRegisterRequest();
+        $register->setUsername('admin');
+        $register->setName('admin');
+        $register->setPassword('123');
+        $this->userService->register($register);
+
+        $login = new UserLoginRequest();
+        $login->setUsername('unknown');
+        $login->setPassword('123');
+        $response = $this->userService->login($login);
+
+        $this->assertSame($register->getUsername(), $response->getUser()->getUsername());
+        $this->assertSame($register->getName(), $response->getUser()->getName());
+        $this->assertTrue(password_verify($register->getPassword(), $response->getUser()->getPassword()));
+    }
+
+    public function testLoginWrongPassword() {
+        $this->expectException(ValidationException::class);
+        $register = new UserRegisterRequest();
+        $register->setUsername('admin');
+        $register->setName('admin');
+        $register->setPassword('123');
+        $this->userService->register($register);
+
+        $login = new UserLoginRequest();
+        $login->setUsername('admin');
+        $login->setPassword('unknown');
+        $response = $this->userService->login($login);
+
+        $this->assertSame($register->getUsername(), $response->getUser()->getUsername());
+        $this->assertSame($register->getName(), $response->getUser()->getName());
+        $this->assertTrue(password_verify($register->getPassword(), $response->getUser()->getPassword()));
     }
 }
