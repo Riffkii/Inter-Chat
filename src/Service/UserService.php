@@ -58,7 +58,6 @@ class UserService {
                     $response = new UserLoginResponse();
                     $response->setUser($result);
                     Database::commit();
-                    //redirect
                     return $response;
                 }
             }

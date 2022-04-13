@@ -6,6 +6,6 @@ use Web\InterChat\Util\View;
 class HomeController {
     
     public function index() {
-        View::render('Home');
+        View::render('Home', []);
     }
 }

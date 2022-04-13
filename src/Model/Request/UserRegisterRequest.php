@@ -4,9 +4,9 @@ namespace Web\InterChat\Model\Request;
 
 class UserRegisterRequest {
 
-    private string $username;
-    private string $name;
-    private string $password;
+    private ?string $username = null;
+    private ?string $name = null;
+    private ?string $password = null;
 
     public function setUsername(string $username) {
         $this->username = $username;
@@ -20,15 +20,15 @@ class UserRegisterRequest {
         $this->password = $password;
     }
 
-    public function getUsername(): string {
+    public function getUsername(): ?string {
         return $this->username;
     }
 
-    public function getName(): string {
+    public function getName(): ?string {
         return $this->name;
     }
     
-    public function getPassword(): string {
+    public function getPassword(): ?string {
         return $this->password;
     }
 }

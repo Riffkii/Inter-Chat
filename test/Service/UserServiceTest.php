@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Web\InterChat\Exception\ValidationException;
 use Web\InterChat\Model\Request\UserLoginRequest;
 
-class UserServiceTest extends TestCase{
+class UserServiceTest extends TestCase {
 
     private UserRepository $userRepository;
     private UserService $userService;
@@ -63,7 +63,7 @@ class UserServiceTest extends TestCase{
         $this->userService->register($request);
     }
 
-    public function testRegisterExist() {
+    public function testRegisterDuplicate() {
         $this->expectException(ValidationException::class);
         $request = new UserRegisterRequest();
         $request->setUsername('admin');

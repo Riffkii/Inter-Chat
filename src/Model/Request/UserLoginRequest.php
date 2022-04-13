@@ -4,8 +4,8 @@ namespace Web\InterChat\Model\Request;
 
 class UserLoginRequest {
 
-    private string $username;
-    private string $password;
+    private ?string $username;
+    private ?string $password;
 
     public function setUsername(string $username) {
         $this->username = $username;
