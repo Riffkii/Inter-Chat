@@ -23,6 +23,11 @@ class Router {
 
         foreach(self::$routes as $route) {
             if($route['method'] == $method && $route['path'] == $path) {
+                foreach($route['middleware'] as $middleware) {
+                    $m = new $middleware;
+                    $m->before();
+                }
+                
                 $controller = new $route['controller'];
                 $function = $route['function'];
                 $controller->$function();

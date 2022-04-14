@@ -14,7 +14,7 @@ class UserRepository {
         $result->execute([$user->getUsername(), $user->getName(), $user->getPassword()]);
     }
 
-    public function findByUsername(string $username): ?User {
+    public function findByUsername(?string $username): ?User {
         $sql = 'SELECT * FROM users WHERE username = ?';
         $result = $this->connection->prepare($sql);
         $result->execute([$username]);

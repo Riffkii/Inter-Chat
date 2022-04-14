@@ -8,15 +8,20 @@ use Web\InterChat\Service\UserService;
 use Web\InterChat\Util\Database;
 use Web\InterChat\Exception\ValidationException;
 use Web\InterChat\Model\Request\UserLoginRequest;
+use Web\InterChat\Service\SessionService;
+use Web\InterChat\Repository\SessionRepository;
 
 class UserController {
 
-    private UserRepository $userRepository;
     private UserService $userService;
+    private SessionService $sessionService;
 
     public function __construct() {
-        $this->userRepository = new UserRepository(Database::getConnection());
-        $this->userService = new UserService($this->userRepository);
+        $userRepository = new UserRepository(Database::getConnection());
+        $this->userService = new UserService($userRepository);
+
+        $sessionRepository = new SessionRepository(Database::getConnection());
+        $this->sessionService = new SessionService($sessionRepository, $userRepository);
     }
     
     public function register() {
@@ -55,6 +60,7 @@ class UserController {
             $request->setPassword($_POST['password']);
 
             $this->userService->login($request);
+            $this->sessionService->create($request->getUsername());
             View::redirect('/');
         } catch (ValidationException $e) {
             View::render('login', [
@@ -62,5 +68,10 @@ class UserController {
                 'error' => $e->getMessage()
             ]);
         } 
+    }
+
+    public function logout() {
+        $this->sessionService->destroy();
+        View::redirect('/');
     }
 }

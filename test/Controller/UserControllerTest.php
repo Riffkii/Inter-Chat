@@ -8,19 +8,25 @@ use Web\InterChat\Service\UserService;
 use Web\InterChat\Util\Database;
 use Web\InterChat\Model\Request\UserRegisterRequest;
 use Web\InterChat\Exception\ValidationException;
+use Web\InterChat\Repository\SessionRepository;
+use Web\InterChat\Service\SessionService;
 
 class UserControllerTest extends TestCase {
 
     private UserRepository $userRepository;
     private UserService $userService;
     private UserController $userController;
+    private SessionService $sessionService;
      
     protected function setUp(): void {
         $this->userRepository = new UserRepository(Database::getConnection());
         $this->userService = new UserService($this->userRepository);
         $this->userController = new UserController($this->userService);
+        $sessionRepository = new SessionRepository(Database::getConnection());
+        $this->sessionService = new SessionService($sessionRepository, $this->userRepository);
 
         putenv('mode=test');
+        $sessionRepository->deleteAll();
         $this->userRepository->deleteAll();
     }
 
@@ -97,5 +103,15 @@ class UserControllerTest extends TestCase {
         $this->userController->postLogin();
 
         $this->expectOutputRegex('[Username or Password is wrong]');
+    }
+
+    public function testLogout() {
+        $this->registerHelper();
+        $result = $this->sessionService->create('admin');
+        $_COOKIE['X-LOG-SESSION'] = $result->getId();
+
+        $this->userController->logout();
+
+        $this->expectOutputRegex('[Location: /]');
     }
 }  
