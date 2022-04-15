@@ -7,16 +7,23 @@ use Web\InterChat\Model\Request\UserRegisterRequest;
 use PHPUnit\Framework\TestCase;
 use Web\InterChat\Exception\ValidationException;
 use Web\InterChat\Model\Request\UserLoginRequest;
+use Web\InterChat\Repository\SessionRepository;
+use Web\InterChat\Model\Request\UserCnRequest;
+use Web\InterChat\Model\Database\Session;
+use Web\InterChat\Model\Request\UserCpRequest;
 
 class UserServiceTest extends TestCase {
 
+    private SessionRepository $sessionRepository;
     private UserRepository $userRepository;
     private UserService $userService;
 
     protected function setUp(): void {
+        $this->sessionRepository = new SessionRepository(Database::getConnection());
         $this->userRepository = new UserRepository(Database::getConnection());
-        $this->userService = new UserService($this->userRepository);
+        $this->userService = new UserService($this->userRepository, $this->sessionRepository);
 
+        $this->sessionRepository->deleteAll();
         $this->userRepository->deleteAll();
     }
 
@@ -161,5 +168,111 @@ class UserServiceTest extends TestCase {
         $this->assertSame($register->getUsername(), $response->getUser()->getUsername());
         $this->assertSame($register->getName(), $response->getUser()->getName());
         $this->assertTrue(password_verify($register->getPassword(), $response->getUser()->getPassword()));
+    }
+
+    public function testChangeNameSuccess() {
+        $register = new UserRegisterRequest();
+        $register->setUsername('admin');
+        $register->setName('admin');
+        $register->setPassword('123');
+        $this->userService->register($register);
+
+        $session = new Session();
+        $session->setId(uniqid());
+        $session->setUserUsername($register->getUsername());
+        $this->sessionRepository->save($session);
+        $_COOKIE['X-LOG-SESSION'] = $session->getId();
+
+        $request = new UserCnRequest();
+        $request->setName('bot-x');
+        $response = $this->userService->changeName($request);
+
+        $this->assertNotSame($register->getName(), $response->getUser()->getName());
+    }
+
+    public function testChangeNameBlank() {
+        $this->expectException(ValidationException::class);
+        $register = new UserRegisterRequest();
+        $register->setUsername('admin');
+        $register->setName('admin');
+        $register->setPassword('123');
+        $this->userService->register($register);
+
+        $session = new Session();
+        $session->setId(uniqid());
+        $session->setUserUsername($register->getUsername());
+        $this->sessionRepository->save($session);
+        $_COOKIE['X-LOG-SESSION'] = $session->getId();
+
+        $request = new UserCnRequest();
+        $request->setName('');
+        $response = $this->userService->changeName($request);
+
+        $this->assertNull($response);
+    }
+
+    public function testChangePasswordSuccess() {
+        $register = new UserRegisterRequest();
+        $register->setUsername('admin');
+        $register->setName('admin');
+        $register->setPassword('123');
+        $this->userService->register($register);
+
+        $session = new Session();
+        $session->setId(uniqid());
+        $session->setUserUsername($register->getUsername());
+        $this->sessionRepository->save($session);
+        $_COOKIE['X-LOG-SESSION'] = $session->getId();
+
+        $request = new UserCpRequest();
+        $request->setOldPassword($register->getPassword());
+        $request->setNewPassword('1234');
+        $response = $this->userService->changePassword($request);
+
+        $this->assertNotNull($response);
+    }
+
+    public function testChangePasswordBlank() {
+        $this->expectException(ValidationException::class);
+        $register = new UserRegisterRequest();
+        $register->setUsername('admin');
+        $register->setName('admin');
+        $register->setPassword('123');
+        $this->userService->register($register);
+
+        $session = new Session();
+        $session->setId(uniqid());
+        $session->setUserUsername($register->getUsername());
+        $this->sessionRepository->save($session);
+        $_COOKIE['X-LOG-SESSION'] = $session->getId();
+
+        $request = new UserCpRequest();
+        $request->setOldPassword('');
+        $request->setNewPassword('1234');
+        $response = $this->userService->changePassword($request);
+
+        $this->assertNull($response);
+    }
+
+    public function testChangePasswordWrongOldPassword() {
+        $this->expectException(ValidationException::class);
+        $register = new UserRegisterRequest();
+        $register->setUsername('admin');
+        $register->setName('admin');
+        $register->setPassword('123');
+        $this->userService->register($register);
+
+        $session = new Session();
+        $session->setId(uniqid());
+        $session->setUserUsername($register->getUsername());
+        $this->sessionRepository->save($session);
+        $_COOKIE['X-LOG-SESSION'] = $session->getId();
+
+        $request = new UserCpRequest();
+        $request->setOldPassword('i dont know');
+        $request->setNewPassword('1234');
+        $response = $this->userService->changePassword($request);
+
+        $this->assertNull($response);
     }
 }

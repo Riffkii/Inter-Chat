@@ -10,6 +10,8 @@ use Web\InterChat\Exception\ValidationException;
 use Web\InterChat\Model\Request\UserLoginRequest;
 use Web\InterChat\Service\SessionService;
 use Web\InterChat\Repository\SessionRepository;
+use Web\InterChat\Model\Request\UserCnRequest;
+use Web\InterChat\Model\Request\UserCpRequest;
 
 class UserController {
 
@@ -17,10 +19,9 @@ class UserController {
     private SessionService $sessionService;
 
     public function __construct() {
-        $userRepository = new UserRepository(Database::getConnection());
-        $this->userService = new UserService($userRepository);
-
-        $sessionRepository = new SessionRepository(Database::getConnection());
+        $sessionRepository = new SessionRepository(Database::getConnection('app'));
+        $userRepository = new UserRepository(Database::getConnection('app'));
+        $this->userService = new UserService($userRepository, $sessionRepository);
         $this->sessionService = new SessionService($sessionRepository, $userRepository);
     }
     
@@ -73,5 +74,54 @@ class UserController {
     public function logout() {
         $this->sessionService->destroy();
         View::redirect('/');
+    }
+
+    public function profile() {
+        View::render('Profile', [
+            'title' => 'Profile'
+        ]);
+    }
+
+    public function changeName() {
+        View::render('ChangeName', [
+            'title' => 'Profile'
+        ]);
+    }
+
+    public function postChangeName() {
+        try {
+            $request = new UserCnRequest();
+            $request->setName($_POST['cn']);
+
+            $this->userService->changeName($request);
+            View::redirect('/');
+        } catch (ValidationException $e) {
+            View::render('ChangeName', [
+                'title' => 'Profile',
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function changePassword() {
+        View::render('ChangePassword', [
+            'title' => 'Profile'
+        ]);
+    }
+
+    public function postChangePassword() {
+        try {
+            $request = new UserCpRequest();
+            $request->setOldPassword($_POST['op']);
+            $request->setNewPassword($_POST['np']);
+
+            $this->userService->changePassword($request);
+            View::redirect('/');
+        } catch (ValidationException $e) {
+            View::render('ChangePassword', [
+                'title' => 'Profile',
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 }

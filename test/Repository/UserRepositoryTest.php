@@ -8,10 +8,14 @@ use PDOException;
 
 class UserRepositoryTest extends TestCase {
 
+    private SessionRepository $sessionRepository;
     private UserRepository $userRepository;
 
     protected function setUp(): void {
+        $this->sessionRepository = new SessionRepository(Database::getConnection());
         $this->userRepository = new UserRepository(Database::getConnection());
+
+        $this->sessionRepository->deleteAll();
         $this->userRepository->deleteAll();
     }
     
@@ -44,5 +48,34 @@ class UserRepositoryTest extends TestCase {
     public function testFindByUsernameFailed() {
         $result = $this->userRepository->findByUsername("unknown");
         $this->assertNull($result);
+    }
+
+    public function testUpdate() {
+        $user = new User();
+        $user->setUsername('1');
+        $user->setName('joko');
+        $user->setPassword('123');
+        $this->userRepository->save($user);
+
+        $user->setUsername('2');
+        $user->setName('budi');
+        $this->userRepository->save($user);
+
+        $request = new User();
+        $request->setUsername('1');
+        $request->setName('bot');
+        $request->setPassword('123');
+        $this->userRepository->update($request);
+
+        $request->setUsername('2');
+        $request->setName('sky');
+        $request->setPassword('gtw');
+        $this->userRepository->update($request);
+
+        $response = $this->userRepository->findByUsername($request->getUsername());
+
+        $this->assertSame($request->getUsername(), $response->getUsername());
+        $this->assertSame($request->getName(), $response->getName());
+        $this->assertSame($request->getPassword(), $response->getPassword());
     }
 }

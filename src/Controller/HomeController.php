@@ -14,8 +14,8 @@ class HomeController {
     private SessionService $sessionService;
 
     public function __construct() {
-        $this->sessionRepository = new SessionRepository(Database::getConnection());
-        $this->userRepository = new UserRepository(Database::getConnection());
+        $this->sessionRepository = new SessionRepository(Database::getConnection('app'));
+        $this->userRepository = new UserRepository(Database::getConnection('app'));
         $this->sessionService = new SessionService($this->sessionRepository, $this->userRepository);
     }
     

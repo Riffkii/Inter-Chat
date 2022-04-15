@@ -16,10 +16,10 @@ class MiddlewareTest extends TestCase {
     private SessionService $sessionService;
      
     protected function setUp(): void {
-        $userRepository = new UserRepository(Database::getConnection());
-        $userService = new UserService($userRepository);
-        $this->userController = new UserController($userService);
         $sessionRepository = new SessionRepository(Database::getConnection());
+        $userRepository = new UserRepository(Database::getConnection());
+        $userService = new UserService($userRepository, $sessionRepository);
+        $this->userController = new UserController($userService);
         $this->sessionService = new SessionService($sessionRepository, $userRepository);
 
         putenv('mode=test');

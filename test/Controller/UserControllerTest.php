@@ -19,10 +19,10 @@ class UserControllerTest extends TestCase {
     private SessionService $sessionService;
      
     protected function setUp(): void {
-        $this->userRepository = new UserRepository(Database::getConnection());
-        $this->userService = new UserService($this->userRepository);
-        $this->userController = new UserController($this->userService);
         $sessionRepository = new SessionRepository(Database::getConnection());
+        $this->userRepository = new UserRepository(Database::getConnection());
+        $this->userService = new UserService($this->userRepository, $sessionRepository);
+        $this->userController = new UserController($this->userService);
         $this->sessionService = new SessionService($sessionRepository, $this->userRepository);
 
         putenv('mode=test');
@@ -113,5 +113,73 @@ class UserControllerTest extends TestCase {
         $this->userController->logout();
 
         $this->expectOutputRegex('[Location: /]');
+    }
+
+    public function testChangeName() {
+        $this->userController->changeName();
+        $this->expectOutputRegex('[Change Name]');
+    }
+
+    public function testPostChangeNameSuccess() {
+        $this->registerHelper();
+        $result = $this->sessionService->create('admin');
+        $_COOKIE['X-LOG-SESSION'] = $result->getId();
+        $_POST['cn'] = 'yntkts';
+
+        $this->userController->postChangeName();
+
+        $this->expectOutputRegex('[Location: /]');
+    }
+
+    public function testPostChangeNameBlank() {
+        $this->registerHelper();
+        $result = $this->sessionService->create('admin');
+        $_COOKIE['X-LOG-SESSION'] = $result->getId();
+        $_POST['cn'] = '';
+
+        $this->userController->postChangeName();
+
+        $this->expectOutputRegex('[Name can not blank]');
+    }
+
+    public function testChangePassword() {
+        $this->userController->changePassword();
+        $this->expectOutputRegex('[Change Password]');
+    }
+
+    public function testChangePasswordBlankOldPassword() {
+        $this->registerHelper();
+        $result = $this->sessionService->create('admin');
+        $_COOKIE['X-LOG-SESSION'] = $result->getId();
+        $_POST['op'] = '';
+        $_POST['np'] = 'gtw';
+
+        $this->userController->postChangePassword();
+
+        $this->expectOutputRegex('[Old Password or New Password can not blank]');
+    }
+
+    public function testChangePasswordBlankNewPassword() {
+        $this->registerHelper();
+        $result = $this->sessionService->create('admin');
+        $_COOKIE['X-LOG-SESSION'] = $result->getId();
+        $_POST['op'] = '123';
+        $_POST['np'] = '';
+
+        $this->userController->postChangePassword();
+
+        $this->expectOutputRegex('[Old Password or New Password can not blank]');
+    }
+
+    public function testChangePasswordWrongOldPassword() {
+        $this->registerHelper();
+        $result = $this->sessionService->create('admin');
+        $_COOKIE['X-LOG-SESSION'] = $result->getId();
+        $_POST['op'] = '12';
+        $_POST['np'] = 'gtw';
+
+        $this->userController->postChangePassword();
+
+        $this->expectOutputRegex('[Old Password is wrong]');
     }
 }  

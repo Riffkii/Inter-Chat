@@ -13,5 +13,10 @@ Router::add('POST', '/user/login', UserController::class, 'postLogin', [MustNotL
 Router::add('GET', '/user/register', UserController::class, 'register', [MustNotLogin::class]);
 Router::add('POST', '/user/register', UserController::class, 'postRegister', [MustNotLogin::class]);
 Router::add('GET', '/user/logout', UserController::class, 'logout', [MustLogin::class]);
+Router::add('GET', '/user/profile', UserController::class, 'profile', [MustLogin::class]);
+Router::add('GET', '/user/cn', UserController::class, 'changeName', [MustLogin::class]);
+Router::add('POST', '/user/cn', UserController::class, 'postChangeName', [MustLogin::class]);
+Router::add('GET', '/user/cp', UserController::class, 'changePassword', [MustLogin::class]);
+Router::add('POST', '/user/cp', UserController::class, 'postChangePassword', [MustLogin::class]);
 
 Router::run();

@@ -14,6 +14,12 @@ class UserRepository {
         $result->execute([$user->getUsername(), $user->getName(), $user->getPassword()]);
     }
 
+    public function update(User $user) {
+        $sql = 'UPDATE users SET name = ?, password = ? WHERE username = ?';
+        $result = $this->connection->prepare($sql);
+        $result->execute([$user->getName(), $user->getPassword(), $user->getUsername()]);
+    }
+
     public function findByUsername(?string $username): ?User {
         $sql = 'SELECT * FROM users WHERE username = ?';
         $result = $this->connection->prepare($sql);

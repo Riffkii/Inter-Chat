@@ -10,8 +10,8 @@ use Web\InterChat\Util\View;
 class MustNotLogin {
 
     public function before() {
-        $sessionRepository = new SessionRepository(Database::getConnection());
-        $userRepository = new UserRepository(Database::getConnection());
+        $sessionRepository = new SessionRepository(Database::getConnection('app'));
+        $userRepository = new UserRepository(Database::getConnection('app'));
         $sessionService = new SessionService($sessionRepository, $userRepository);
 
         $user = $sessionService->current();

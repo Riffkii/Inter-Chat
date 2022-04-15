@@ -7,11 +7,11 @@ class UserLoginRequest {
     private ?string $username;
     private ?string $password;
 
-    public function setUsername(string $username) {
+    public function setUsername(?string $username) {
         $this->username = $username;
     }
 
-    public function setPassword(string $password) {
+    public function setPassword(?string $password) {
         $this->password = $password;
     }
 
