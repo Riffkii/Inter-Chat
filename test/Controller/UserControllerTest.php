@@ -22,10 +22,10 @@ class UserControllerTest extends TestCase {
         $sessionRepository = new SessionRepository(Database::getConnection());
         $this->userRepository = new UserRepository(Database::getConnection());
         $this->userService = new UserService($this->userRepository, $sessionRepository);
-        $this->userController = new UserController($this->userService);
+        $this->userController = new UserController();
         $this->sessionService = new SessionService($sessionRepository, $this->userRepository);
 
-        putenv('mode=test');
+        putenv('type=test');
         $sessionRepository->deleteAll();
         $this->userRepository->deleteAll();
     }

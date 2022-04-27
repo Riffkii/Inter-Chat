@@ -6,6 +6,7 @@ use Web\InterChat\Controller\HomeController;
 use Web\InterChat\Controller\UserController;
 use Web\InterChat\Middleware\MustNotLogin;
 use Web\InterChat\Middleware\MustLogin;
+use Web\InterChat\Controller\FriendshipController;
 
 Router::add('GET', '/', HomeController::class, 'index');
 Router::add('GET', '/user/login', UserController::class, 'login', [MustNotLogin::class]);
@@ -18,5 +19,8 @@ Router::add('GET', '/user/cn', UserController::class, 'changeName', [MustLogin::
 Router::add('POST', '/user/cn', UserController::class, 'postChangeName', [MustLogin::class]);
 Router::add('GET', '/user/cp', UserController::class, 'changePassword', [MustLogin::class]);
 Router::add('POST', '/user/cp', UserController::class, 'postChangePassword', [MustLogin::class]);
+Router::add('GET', '/user/find-friend', FriendshipController::class, 'findFriend', [MustLogin::class]);
+Router::add('POST', '/user/find-friend', FriendshipController::class, 'postFindFriend', [MustLogin::class]);
+Router::add('POST', '/user/add-friend', FriendshipController::class, 'postAddFriend', [MustLogin::class]);
 
 Router::run();

@@ -10,7 +10,7 @@ class View {
 
     public static function redirect(string $path) {
         header("Location: $path");
-        if(getenv('mode') != 'test') {
+        if(getenv('type') != 'test') {
             exit();
         }
     }

@@ -12,11 +12,11 @@
     
     <form action="/user/login" method="post">
         <label for="username">Username: 
-            <input type="text" name="username" id="username">
+            <input type="text" name="username" id="username" autocomplete="off">
         </label>
         </br>
         <label for="password">Password: 
-            <input type="password" name="password" id="password">
+            <input type="password" name="password" id="password" autocomplete="off">
         </label>
         </br>
         <input type="submit" value="Login">

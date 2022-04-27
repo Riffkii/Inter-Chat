@@ -12,11 +12,11 @@
 
     <form action="/user/cp" method="post">
         <label for="op">Old Name: 
-            <input type="text" name="op" id="op">
+            <input type="text" name="op" id="op" autocomplete="off">
         </label>
         <br>
         <label for="np">New Name: 
-            <input type="text" name="np" id="np">
+            <input type="text" name="np" id="np" autocomplete="off">
         </label>
         <br>
         <input type="submit" value="Change">

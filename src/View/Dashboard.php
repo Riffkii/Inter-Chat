@@ -10,7 +10,14 @@
     <h1>Welcome <?= $model['name'] ?></h1>
     <br>
 
+    <a href="/user/notification"><button>Notification<?= $model['notification']?></button></a>
+    <a href="/user/find-friend"><button>Search Friend</button></a>
+    <a href="/user/friends"><button>Friends</button></a>
     <a href="/user/profile"><button>Profile</button></a>
     <a href="/user/logout"><button>Logout</button></a>
+    <br>
+    <br>
+
+    <label for="">Search: <input type="text" autocomplete="off" id="search"></label>
 </body>
 </html>

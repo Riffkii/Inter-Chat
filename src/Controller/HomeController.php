@@ -23,7 +23,8 @@ class HomeController {
         $user = $this->sessionService->current();
         if($user != null) {
             View::render('Dashboard', [
-                'name' => $user->getName()
+                'name' => $user->getName(),
+                'notification' => ' '
             ]);
         } else {
             View::render('Home', []);

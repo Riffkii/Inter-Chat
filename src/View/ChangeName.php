@@ -12,7 +12,7 @@
 
     <form action="/user/cn" method="post">
         <label for="cn">New Name: 
-            <input type="text" name="cn" id="cn">
+            <input type="text" name="cn" id="cn" autocomplete="off">
         </label>
         
         <input type="submit" value="Change">
