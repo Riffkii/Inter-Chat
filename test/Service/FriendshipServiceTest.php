@@ -14,6 +14,7 @@ use Web\InterChat\Model\Database\Friendship;
 use Error;
 use Web\InterChat\Model\Request\UnfriendRequest;
 use Web\InterChat\Model\Request\FindNotFriendRequest;
+use Web\InterChat\Model\Request\FindFriendRequest;
 
 class FriendshipServiceTest extends TestCase {
 
@@ -77,6 +78,38 @@ class FriendshipServiceTest extends TestCase {
         $this->friendshipService->addFriend($request);
     }
 
+    public function testFindFriendSuccess() {
+        $sessionId = $this->registerHelper("joko", "joko13", "123");
+        $this->registerHelper("rudi", "rudi13", "123");
+        $this->registerHelper("imron", "imron13", "123");
+
+        $friendship = new Friendship();
+        $friendship->setUser1Username("IMron");
+        $friendship->setUser2Username("jOko");
+        $this->friendshipRepository->save($friendship);
+
+        $friendship = new Friendship();
+        $friendship->setUser1Username("imron");
+        $friendship->setUser2Username("rudi");
+        $this->friendshipRepository->save($friendship);
+
+        $_COOKIE['X-LOG-SESSION'] = $sessionId;
+        $request = new FindFriendRequest();
+        $request->setToUser("imron");
+        $response = $this->friendshipService->findFriend($request);
+
+        $this->assertSame("imron", $response->getFriends()[0]->getUsername());
+        $this->assertSame(1, sizeof($response->getFriends()));
+    }
+
+    public function testFindFriendFailed() {
+        $this->expectException(Error::class);
+        $_COOKIE['X-LOG-SESSION'] = "lucha";
+        $request = new FindFriendRequest();
+        $request->setToUser("imron");
+        $this->friendshipService->findFriend($request);
+    }
+
     public function testFindNotFriendSuccess() {
         $sessionId = $this->registerHelper("joko", "joko13", "123");
         $this->registerHelper("rudi", "rudi13", "123");
@@ -106,7 +139,7 @@ class FriendshipServiceTest extends TestCase {
         $_COOKIE['X-LOG-SESSION'] = "lucha";
         $request = new FindNotFriendRequest();
         $request->setToUser("imron");
-        $response = $this->friendshipService->findNotFriend($request);
+        $this->friendshipService->findNotFriend($request);
     }
 
     public function testShowFriendsSuccess() {
@@ -127,8 +160,8 @@ class FriendshipServiceTest extends TestCase {
         $_COOKIE['X-LOG-SESSION'] = $sessionId;
         $response = $this->friendshipService->showFriends();
 
-        $this->assertSame("imron", $response[0]);
-        $this->assertSame("joko", $response[1]);
+        $this->assertSame("imron", $response[0]->getUsername());
+        $this->assertSame("joko", $response[1]->getUsername());
         $this->assertSame(2, sizeof($response));
     }
 
@@ -136,6 +169,36 @@ class FriendshipServiceTest extends TestCase {
         $this->expectException(Error::class);
         $_COOKIE['X-LOG-SESSION'] = "unknown";
         $this->friendshipService->showFriends();
+    }
+
+    public function testFindOnlineFriendsSuccess() {
+        $sessionId = $this->registerHelper("joko", "joko13", "123");
+        $this->registerHelper("imron", "imron13", "123");
+        $user = new User();
+        $user->setUsername("rudi");
+        $user->setName("rudi13");
+        $user->setPassword(password_hash("123", PASSWORD_BCRYPT));
+        $this->userRepository->save($user);
+
+        $friendship = new Friendship();
+        $friendship->setUser1Username("rudi");
+        $friendship->setUser2Username("jOko");
+        $this->friendshipRepository->save($friendship);
+        $friendship->setUser1Username("imron");
+        $friendship->setUser2Username("joko");
+        $this->friendshipRepository->save($friendship);
+
+        $_COOKIE['X-LOG-SESSION'] = $sessionId;
+        $response = $this->friendshipService->findOnlineFriends();
+
+        $this->assertSame(1, sizeof($response));
+        $this->assertSame('imron', $response[0]->getUsername());
+    }
+
+    public function testFindOnlineFriendsFailed() {
+        $this->expectException(Error::class);
+        $_COOKIE['X-LOG-SESSION'] = "unknown";
+        $this->friendshipService->findOnlineFriends();
     }
 
     public function testUnfriendSuccess() {

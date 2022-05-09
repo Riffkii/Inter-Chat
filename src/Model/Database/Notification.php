@@ -3,35 +3,45 @@
 namespace Web\InterChat\Model\Database;
 use JsonSerializable;
 
-class User implements JsonSerializable{
+class Notification implements JsonSerializable {
     
+    private int $id;
     private string $username;
-    private string $name;
-    private string $password;
+    private string $messageFrom;
+    private string $message;
+
+    public function setID(int $id) {
+        $this->id = $id;
+    }
 
     public function setUsername(string $username) {
         $this->username = $username;
     }
 
-    public function setName(string $name) {
-        $this->name = $name;
+    public function setMessageFrom(string $messageFrom) {
+        $this->messageFrom = $messageFrom;
     }
 
-    public function setPassword(string $password) {
-        $this->password = $password;
+    public function setMessage(string $message) {
+        $this->message = $message;
+    }
+
+    public function getID(): int {
+        return $this->id;
     }
 
     public function getUsername(): string {
         return $this->username;
     }
 
-    public function getName(): string {
-        return $this->name;
+    public function getMessageFrom(): string {
+        return $this->messageFrom;
+    }
+
+    public function getMessage(): string {
+        return $this->message;
     }
     
-    public function getPassword(): string {
-        return $this->password;
-    }
 	/**
 	 * Specify data which should be serialized to JSON
 	 * Serializes the object to a value that can be serialized natively by json_encode().

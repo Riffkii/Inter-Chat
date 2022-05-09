@@ -27,6 +27,7 @@ CREATE TABLE friendships (
 CREATE TABLE notifications (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(30) NOT NULL,
+    message_from VARCHAR(50) NOT NULL,
     message VARCHAR(100),
     CONSTRAINT fk_notifications_users
         FOREIGN KEY (username) 

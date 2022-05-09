@@ -12,6 +12,12 @@ namespace Web\InterChat\Middleware {
     }
 }
 
+namespace Web\InterChat\Controller {
+    function header(string $header) {
+        echo $header;
+    }
+}
+
 namespace Web\InterChat\Service {
     function setcookie($key, $value, $time, $path) {
         echo $key;

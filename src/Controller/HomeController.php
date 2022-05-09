@@ -24,7 +24,6 @@ class HomeController {
         if($user != null) {
             View::render('Dashboard', [
                 'name' => $user->getName(),
-                'notification' => ' '
             ]);
         } else {
             View::render('Home', []);

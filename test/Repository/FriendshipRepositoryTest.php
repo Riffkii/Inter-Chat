@@ -14,10 +14,12 @@ class FriendshipRepositoryTest extends TestCase{
 
     protected function setUp(): void {
         $sessionRepository = new SessionRepository(Database::getConnection());
+        $notificationRepository = new NotificationRepository(Database::getConnection());
         $this->friendshipRepository = new FriendshipRepository(Database::getConnection());
         $this->userRepository = new UserRepository(Database::getConnection());
 
         $sessionRepository->deleteAll();
+        $notificationRepository->deleteAll();
         $this->friendshipRepository->deleteAll();
         $this->userRepository->deleteAll();
     }
@@ -61,6 +63,46 @@ class FriendshipRepositoryTest extends TestCase{
         $friendship->setUser1Username("joko");
         $friendship->setUser2Username("udin");
         $this->friendshipRepository->save($friendship);
+    }
+
+    public function testFindFriendsByNameSuccess() {
+        $this->registerHelper("udin", "udin13", "123");
+        $this->registerHelper("joko", "joko13", "123");
+        $this->registerHelper("tejo", "tejo13", "123");
+        $this->registerHelper("farel", "farel13", "123");
+
+        $friendship = new Friendship();
+        $friendship->setUser1Username("Udin");
+        $friendship->setUser2Username("Joko");
+        $this->friendshipRepository->save($friendship);
+
+        $friendship = new Friendship();
+        $friendship->setUser1Username("uDin");
+        $friendship->setUser2Username("Tejo");
+        $this->friendshipRepository->save($friendship);
+
+        $friendship = new Friendship();
+        $friendship->setUser1Username("tejo");
+        $friendship->setUser2Username("joko");
+        $this->friendshipRepository->save($friendship);
+
+        $friendship = new Friendship();
+        $friendship->setUser1Username("fArel");
+        $friendship->setUser2Username("Joko");
+        $this->friendshipRepository->save($friendship);
+
+        $result = $this->friendshipRepository->findFriendsByUsername("jokO");
+
+        $this->assertSame("farel13", $result[0]->getName());
+        $this->assertSame("tejo13", $result[1]->getName());
+        $this->assertSame("udin13", $result[2]->getName());
+        $this->assertSame(3, sizeof($result));
+    }
+
+    public function testFindFriendsByNameFailed() {
+        $this->registerHelper("udin", "udin13", "123");
+        $result = $this->friendshipRepository->findFriendsByUsername("udin");
+        $this->assertSame(0, sizeof($result));
     }
 
     public function testFindFriendsByUsernameSuccess() {
@@ -149,10 +191,38 @@ class FriendshipRepositoryTest extends TestCase{
         $this->assertSame(0, sizeof($result));
     }
 
-    public function testFindNotFriendByUsernameSuccess() {
+    public function testFindFriendByNameSuccess() {
         $this->registerHelper("UDIN", "udin13", "123");
         $this->registerHelper("tara", "tara13", "123");
-        $this->registerHelper("jokO", "udin13", "123");
+        $this->registerHelper("jokO", "joko13", "123");
+        $this->registerHelper("jokOwi", "jokowi13", "123");
+        $this->registerHelper("susan", "susan13", "123");
+
+        $friendship = new Friendship();
+        $friendship->setUser1Username("tara");
+        $friendship->setUser2Username("udiN");
+        $this->friendshipRepository->save($friendship);
+
+        $friendship->setUser1Username("TAra13");
+        $friendship->setUser2Username("uDin");
+        $result = $this->friendshipRepository->findFriendByName($friendship);
+
+        $this->assertSame(1, sizeof($result));
+        $this->assertSame("udin13", $result[0]->getName());
+    }
+
+    public function testFindFriendByNameFailed() {
+        $friendship = new Friendship();
+        $friendship->setUser1Username("TAra13");
+        $friendship->setUser2Username("uDin");
+        $result = $this->friendshipRepository->findFriendByName($friendship);
+        $this->assertSame(0, sizeof($result));
+    }
+
+    public function testFindNotFriendByNameSuccess() {
+        $this->registerHelper("UDIN", "udin13", "123");
+        $this->registerHelper("tara", "tara13", "123");
+        $this->registerHelper("jokO", "joko13", "123");
         $this->registerHelper("jokOwi", "jokowi13", "123");
         $this->registerHelper("susan", "susan13", "123");
 
@@ -163,7 +233,7 @@ class FriendshipRepositoryTest extends TestCase{
 
         $friendship->setUser1Username("tara");
         $friendship->setUser2Username("JOko");
-        $result = $this->friendshipRepository->findNotFriendByUsername($friendship);
+        $result = $this->friendshipRepository->findNotFriendByName($friendship);
 
         $this->assertSame(2, sizeof($result));
         $this->assertSame("joko", $result[0]->getUsername());

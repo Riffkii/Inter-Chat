@@ -29,6 +29,21 @@ class SessionRepository {
         return null;
     }
 
+    public function findAll() {
+        $sql = 'SELECT * FROM sessions';
+        $result = $this->connection->query($sql);
+
+        $data = [];
+        while($row = $result->fetch()) {
+            $session = new Session();
+            $session->setId($row['id']);
+            $session->setUserUsername($row['user_username']);
+            $data[] = $session;
+        }
+
+        return $data;
+    }
+
     public function deleteById(string $id) {
         $sql = 'DELETE FROM sessions WHERE id = ?';
         $result = $this->connection->prepare($sql);

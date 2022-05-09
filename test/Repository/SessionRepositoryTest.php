@@ -52,6 +52,33 @@ class SessionRepositoryTest extends TestCase {
         $this->assertNull($result);
     }
 
+    public function testFindAllSuccess() {
+        $user = new User();
+        $user->setUsername('admin2');
+        $user->setName('admin2');
+        $user->setPassword('123');
+        $this->userRepository->save($user);
+
+        $session = new Session();
+        $session->setId(uniqid());
+        $session->setUserUsername('admin');
+        $this->sessionRepository->save($session);
+        $session->setId(uniqid());
+        $session->setUserUsername('admin2');
+        $this->sessionRepository->save($session);
+
+        $result = $this->sessionRepository->findAll();
+
+        $this->assertSame(2, sizeof($result));
+        $this->assertSame('admin', $result[0]->getUserUsername());
+        $this->assertSame('admin2', $result[1]->getUserUsername());
+    }
+
+    public function testFindAllNull() {
+        $result = $this->sessionRepository->findAll();
+        $this->assertSame(0, sizeof($result));
+    }
+
     public function testDeleteByIdSuccess() {
         $session = new Session();
         $session->setId(uniqid());

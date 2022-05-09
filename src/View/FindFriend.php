@@ -15,38 +15,55 @@
     <?php if(isset($model['data'])) { ?>
         <table>
             <?php foreach($model['data'] as $user) { ?>
+                <?php $condition = true; ?>
                 <tr>
                     <td><?= $user->getName() ?></td>
-                    <td class="button"><input type="button" id="<?= $user->getUsername() ?>" value="Add"></td>
+                    <?php foreach($model['check'] as $check) { ?>
+                        <?php if($check->getUsername() == $user->getUsername()) { ?>
+                            <td class="button"><input type="button" id="<?= $user->getUsername() ?>" value="Sending Request" disabled="true"></td>
+                        <?php $condition = false; ?>
+                        <?php break; } ?>
+                    <?php } ?>
+                    
+                    <?php if($condition == true) { ?>
+                        <td class="button"><input type="button" id="<?= $user->getUsername() ?>" value="Add"></td>
+                    <?php } ?>
                 </tr>
             <?php } ?>
         </table>
     <?php } ?>
 
     <script>
-        const rows = document.querySelectorAll("td.button");
-        for (const row of rows) {
-            row.firstChild.onclick = function () {
-                row.firstChild.value = "Sending Request";
-                const data = JSON.stringify({
-                        target: row.firstChild.id 
-                    })
+        function sendData() {
+            const conn = new WebSocket("ws://localhost:3000");
+            const rows = document.querySelectorAll("td.button");
+            for (const row of rows) {
+                row.firstChild.onclick = function () {
+                    row.firstChild.value = "Sending Request";
+                    row.firstChild.disabled = "true";
 
-                //path (/user/add-friend) ngetrigger method postAddFriend
-                const request = new Request("/user/add-friend", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json"
-                    },
-                    body: JSON.stringify({
-                        target: row.firstChild.id 
-                    })
-                });
+                    //path (/user/add-friend) ngetrigger method postAddFriend
+                    const request = new Request("/user/notifications", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json"
+                        },
+                        body: JSON.stringify({
+                            target: row.firstChild.id ,
+                            message: " sending friendships request"
+                        })
+                    });
 
-                const response = fetch(request);
+                    fetch(request);
+                    conn.send(JSON.stringify({
+                        target: row.firstChild.id
+                    }));
+                }
             }
         }
+
+        sendData();
     </script>
 </body>
 </html>

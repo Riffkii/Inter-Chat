@@ -124,4 +124,15 @@ class UserController {
             ]);
         }
     }
+
+    public function getUsername() {
+        try {
+            $user = ['username' => $this->sessionService->current()->getUsername(), 'status' => 'online'];
+            header("Content-Type: application/json");
+            header("Accept: application/json");
+            echo json_encode($user);
+        } catch (ValidationException $e) {
+            
+        }
+    }
 }

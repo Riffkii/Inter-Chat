@@ -10,6 +10,7 @@ use Web\InterChat\Model\Request\UserRegisterRequest;
 use Web\InterChat\Exception\ValidationException;
 use Web\InterChat\Repository\SessionRepository;
 use Web\InterChat\Service\SessionService;
+use Web\InterChat\Repository\NotificationRepository;
 
 class UserControllerTest extends TestCase {
 
@@ -24,9 +25,11 @@ class UserControllerTest extends TestCase {
         $this->userService = new UserService($this->userRepository, $sessionRepository);
         $this->userController = new UserController();
         $this->sessionService = new SessionService($sessionRepository, $this->userRepository);
+        $notificationsRepository = new NotificationRepository(Database::getConnection());
 
         putenv('type=test');
         $sessionRepository->deleteAll();
+        $notificationsRepository->deleteAll();
         $this->userRepository->deleteAll();
     }
 
@@ -181,5 +184,10 @@ class UserControllerTest extends TestCase {
         $this->userController->postChangePassword();
 
         $this->expectOutputRegex('[Old Password is wrong]');
+    }
+
+    public function testGetUsername() {
+        $data = $this->userController->getUsername();
+        $this->assertSame("as", $data);
     }
 }  

@@ -13,6 +13,8 @@ use Web\InterChat\Model\Request\UnfriendRequest;
 use Web\InterChat\Model\Response\UnfriendResponse;
 use Web\InterChat\Model\Request\FindNotFriendRequest;
 use Web\InterChat\Model\Response\FindNotFriendResponse;
+use Web\InterChat\Model\Request\FindFriendRequest;
+use Web\InterChat\Model\Response\FindFriendResponse;
 
 class FriendshipService {
 
@@ -39,8 +41,24 @@ class FriendshipService {
         }
     }
 
-    public function findFriend() {
+    public function findFriend(FindFriendRequest $request): FindFriendResponse {
+        try {
+            Database::startTransaction();
+            $session = $this->sessionRepository->findById($_COOKIE['X-LOG-SESSION']);
 
+            $friendship = new Friendship();
+            $friendship->setUser1Username($session->getUserUsername());
+            $friendship->setUser2Username($request->getToUser());
+            $friends = $this->friendshipRepository->findFriendByName($friendship);
+
+            $response = new FindFriendResponse();
+            $response->setFriends($friends);
+            Database::commit();
+            return $response;
+        } catch (Exception | Error $e) {
+            Database::rollback();
+            throw $e;
+        }
     }
 
     public function findNotFriend(FindNotFriendRequest $request): FindNotFriendResponse {
@@ -51,7 +69,7 @@ class FriendshipService {
             $friendship = new Friendship();
             $friendship->setUser1Username($session->getUserUsername());
             $friendship->setUser2Username($request->getToUser());
-            $notFriends = $this->friendshipRepository->findNotFriendByUsername($friendship);
+            $notFriends = $this->friendshipRepository->findNotFriendByName($friendship);
 
             $response = new FindNotFriendResponse();
             $response->setNotFriends($notFriends);
@@ -63,7 +81,7 @@ class FriendshipService {
         }
     }
 
-    public function showFriends() {
+    public function showFriends(): array {
         try {
             Database::startTransaction();
             $session = $this->sessionRepository->findById($_COOKIE['X-LOG-SESSION']);
@@ -76,18 +94,27 @@ class FriendshipService {
         }
     }
 
-    // public function showNotFriends(): array {
-    //     try {
-    //         Database::startTransaction();
-    //         $session = $this->sessionRepository->findById($_COOKIE['X-LOG-SESSION']);
-    //         $notFriends = $this->friendshipRepository->findNotFriendsByUsername($session->getUserUsername());
-    //         Database::commit();
-    //         return $notFriends;
-    //     } catch (Exception | Error $e) {
-    //         Database::rollback();
-    //         throw $e;
-    //     }
-    // }
+    public function findOnlineFriends(): array|null {
+        try {
+            Database::startTransaction();
+            $onlineUsers = $this->sessionRepository->findAll();
+            $session = $this->sessionRepository->findById($_COOKIE['X-LOG-SESSION']);
+            $friends = $this->friendshipRepository->findFriendsByUsername($session->getUserUsername());
+
+            $onlineFriends = [];
+            foreach($friends as $friend) {
+                foreach($onlineUsers as $onlineUser) {
+                    if($friend->getUsername() == $onlineUser->getUserUsername()) {
+                        $onlineFriends[] = $friend;
+                    }
+                }
+            }
+            Database::commit();
+            return $onlineFriends;
+        } catch (Exception | Error $e) {
+            Database::rollback();
+        }
+    }
 
     public function unfriend(UnfriendRequest $request): UnfriendResponse {
         try {
