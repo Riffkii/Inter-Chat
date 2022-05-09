@@ -1,0 +1,11 @@
+Technology:
+-PHP
+-JavaScript
+-Websocket
+-Mysql
+
+Feature:
+-Login management
+-Friend management
+-Real time online status
+-Real time chat (Coming Soon)
