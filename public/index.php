@@ -8,6 +8,7 @@ use Web\InterChat\Middleware\MustNotLogin;
 use Web\InterChat\Middleware\MustLogin;
 use Web\InterChat\Controller\FriendshipController;
 use Web\InterChat\Controller\NotificationController;
+use Web\InterChat\Controller\ChatController;
 
 Router::add('GET', '/', HomeController::class, 'index');
 Router::add('GET', '/user/username', UserController::class, 'getUsername', [MustLogin::class]);
@@ -32,5 +33,9 @@ Router::add('GET', '/user/show-online-friends', FriendshipController::class, 'sh
 Router::add('GET', '/user/search-friend', FriendshipController::class, 'searchFriend', [MustLogin::class]);
 Router::add('GET', '/user/friends', FriendshipController::class, 'friends', [MustLogin::class]);
 Router::add('POST', '/user/unfriend', FriendshipController::class, 'postUnfriend', [MustLogin::class]);
+Router::add('GET', '/user/chat', ChatController::class, 'chat', [MustLogin::class]);
+Router::add('POST', '/user/chat', ChatController::class, 'postChat', [MustLogin::class]);
+Router::add('GET', '/user/message', ChatController::class, 'message', [MustLogin::class]);
+Router::add('GET', '/user/check-friend', FriendshipController::class, 'checkFriend', [MustLogin::class]);
 
 Router::run();

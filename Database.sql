@@ -33,3 +33,17 @@ CREATE TABLE notifications (
         FOREIGN KEY (username) 
             REFERENCES users (username)
 );
+
+CREATE TABLE chats (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    from_user VARCHAR(30) NOT NULL,
+    message VARCHAR(120),
+    target_user VARCHAR(30) NOT NULL,
+    time_stamp TIMESTAMP CURRENT_TIMESTAMP,
+    CONSTRAINT fk_chats_users_1
+        FOREIGN KEY (from_user) 
+            REFERENCES users (username),
+    CONSTRAINT fk_chats_users_2
+        FOREIGN KEY (target_user) 
+            REFERENCES users (username)
+)

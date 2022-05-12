@@ -81,6 +81,24 @@ class FriendshipService {
         }
     }
 
+    public function checkFriend(string $target) {
+        try {
+            Database::startTransaction();
+            $session = $this->sessionRepository->findById($_COOKIE['X-LOG-SESSION']);
+            $friends = $this->friendshipRepository->findFriendsByUsername($session->getUserUsername());
+
+            foreach($friends as $friend) {
+                if($friend->getUsername() == $target) {
+                    return json_encode(['success' => 'true']);
+                }
+            }
+            Database::commit();
+        } catch (Exception | Error $e) {
+            Database::rollback();
+            throw $e;
+        }
+    }
+
     public function showFriends(): array {
         try {
             Database::startTransaction();

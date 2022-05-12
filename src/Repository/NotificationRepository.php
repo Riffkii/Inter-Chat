@@ -9,7 +9,7 @@ class NotificationRepository {
     public function __construct(private PDO $connection) {}
 
     public function save(Notification $notification): string {
-        $this->lowerCase($notification);
+        //$this->lowerCase($notification);
         $sql = "INSERT INTO notifications(username, message_from, message) VALUES(?, ?, ?)";
         $result = $this->connection->prepare($sql);
         $result->execute([$notification->getUsername(), $notification->getMessageFrom(), $notification->getMessage()]);
@@ -76,8 +76,8 @@ class NotificationRepository {
         $this->connection->exec($sql);
     }
 
-    private function lowerCase(Notification $notification) {
-        $str = strtolower($notification->getUsername());
-        $notification->setUsername($str);
-    }
+    // private function lowerCase(Notification $notification) {
+    //     $str = strtolower($notification->getUsername());
+    //     $notification->setUsername($str);
+    // }
 }

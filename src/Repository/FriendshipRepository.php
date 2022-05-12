@@ -17,34 +17,7 @@ class FriendshipRepository {
         $result->execute([$friendship->getUser1Username(), $friendship->getUser2Username()]);
     }
 
-    // public function findFriendsByName(string $name): array {
-    //     $sql = "SELECT a.user_1_username, a.user_2_username, user_1.name AS name_1, user_2.name AS name_2 FROM friendships AS a
-    //             JOIN users AS user_1 ON (a.user_1_username = user_1.username)
-    //             JOIN users AS user_2 ON (a.user_2_username = user_2.username)
-    //             WHERE user_1.name = ? OR user_2.name = ?";
-    //     $result = $this->connection->prepare($sql);
-    //     $result->execute([$name, $name]);
-
-    //     $data = [];
-    //     while($row = $result->fetch()) {
-    //         if($row['name_1'] == $name) {
-    //             $user = new User();
-    //             $user->setUsername($row['user_2_username']);
-    //             $user->setName($row['name_2']);
-    //             $data[] = $user;
-    //         } else {
-    //             $user = new User();
-    //             $user->setUsername($row['user_1_username']);
-    //             $user->setName($row['name_1']);
-    //             $data[] = $user;
-    //         }
-    //     }
-
-    //     return $data;
-    // }
-
     public function findFriendsByUsername(string $username): array {
-        $username = strtolower($username);
         $sql = "SELECT a.user_1_username, a.user_2_username, user_1.name AS name_1, user_2.name AS name_2 FROM friendships AS a
                 JOIN users AS user_1 ON (a.user_1_username = user_1.username)
                 JOIN users AS user_2 ON (a.user_2_username = user_2.username)
@@ -146,8 +119,8 @@ class FriendshipRepository {
     }
 
     private function sort(Friendship $friendship) {
-        $str1 = strtolower($friendship->getUser1Username());
-        $str2 = strtolower($friendship->getUser2Username());
+        $str1 = $friendship->getUser1Username();
+        $str2 = $friendship->getUser2Username();
         if(strcmp($str1, $str2) > 0) {
             $temp = $str1;
             $friendship->setUser1Username($str2);

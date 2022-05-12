@@ -8,4 +8,5 @@ Feature:
 -Login management
 -Friend management
 -Real time online status
--Real time chat (Coming Soon)
+-Real time notification
+-Real time chat

@@ -16,7 +16,7 @@ class MustLogin {
 
         $user = $sessionService->current();
         if($user == null) {
-            View::redirect('Location: /user/login');
+            View::redirect('/user/login');
         } 
     }
 }

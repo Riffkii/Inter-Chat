@@ -56,7 +56,7 @@
                                 row.appendChild(status);
 
                                 const buttonData = document.createElement('td');
-                                buttonData.class = 'button';
+                                buttonData.className = 'button';
                                 const button = document.createElement('input');
                                 button.type = 'button';
                                 button.id = id;
@@ -65,6 +65,14 @@
                                 row.appendChild(buttonData);
 
                                 table.appendChild(row);
+                            }
+                        })
+                        .then(() => {
+                            const rows = document.querySelectorAll("td.button");
+                            for (const row of rows) {
+                                row.firstChild.onclick = function () {
+                                    window.location.href = '/user/chat?target=' + row.firstChild.id;
+                                }
                             }
                         });
                 });
@@ -100,14 +108,6 @@
                     }
                 }
             };
-
-            conn.onclose = function(e) {
-                const userData = JSON.parse(currentUser);
-                conn.send(JSON.stringify({
-                    username: userData.username,
-                    status: 'offline'
-                }));
-            }
 
             const logout = document.getElementById('logout');
             logout.onclick = e => {
@@ -163,7 +163,7 @@
                                     row.appendChild(status);
 
                                     const buttonData = document.createElement('td');
-                                    buttonData.class = 'button';
+                                    buttonData.className = 'button';
                                     const button = document.createElement('input');
                                     button.type = 'button';
                                     button.id = id;

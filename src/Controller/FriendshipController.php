@@ -72,6 +72,17 @@ class FriendshipController {
         }
     }
 
+    public function checkFriend() {
+        try {
+            $friend = $this->friendshipService->checkFriend($_GET['target']);
+            header("Content-Type: application/json");
+            header("Accept: application/json");
+            echo $friend;
+        } catch (Exception | Error $e) {
+
+        }
+    }
+
     public function showFriends() {
         try {
             $friends = $this->friendshipService->showFriends();
