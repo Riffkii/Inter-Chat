@@ -1,0 +1,195 @@
+body {
+    background-color: #bdbdbd;
+}
+
+.container {
+    width: 34%;
+    height: 62vh;
+    background-color: #e0e0e0;
+    border-radius: 40px;
+    margin: 110px auto;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 10px black;
+    box-sizing: border-box;
+    overflow: hidden;
+    padding-bottom: 10px;
+}
+
+.container header {
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+}
+
+.container header h2 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 40px;
+    font-weight: 600;
+    margin: 10px;
+    color: rgb(46, 46, 46);
+}
+
+.container main {
+    display: flex;
+    height: 81%;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container main .navigation {
+    width: 78%;
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+}
+
+.container main .navigation img {
+    z-index: 20;
+    width: 9%;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.container main .navigation img:nth-child(1):active {
+    transform: scale(0.7);
+}
+
+.container main .navigation img.clicked:nth-child(2) {
+    transform: scale(0.7);
+}
+
+.container main .navigation img.clicked:nth-child(3) {
+    transform: rotate(90deg);
+}
+
+.container main .navigation div:nth-child(5) {
+    opacity: 0;
+    position: absolute;
+    top: -10%;
+    left: 78%;
+    width: 32%;
+    border-radius: 25%;
+    box-shadow: 0 0 10px black;
+    background-color: #cccccc;
+    transition: 0.3s;
+    z-index: -1;
+}
+
+.container main .navigation div:nth-child(4) {
+    opacity: 0;
+    position: absolute;
+    top: -10%;
+    left: 45%;
+    width: 32%;
+    border-radius: 25%;
+    box-shadow: 0 0 10px black;
+    background-color: #cccccc;
+    transition: 0.3s;
+    z-index: -1;
+}
+
+.container main .navigation div.user-friend {
+    opacity: 1;
+    z-index: 19;
+}
+
+.container main .navigation div.settings {
+    opacity: 1;
+    z-index: 19;
+}
+
+.container main .navigation div ul li a {
+    display: block;
+    position: relative;
+    text-decoration: none;
+    margin: 10px 45px;
+    font-size: 18px;
+    color: rgb(46, 46, 46);
+    transition: 0.3s;
+    opacity: 0;
+}
+
+.container main .navigation div.user-friend ul li a {
+    opacity: 1;
+}
+
+.container main .navigation div.user-friend ul li a:hover {
+    color: #b1b1b1;
+}
+
+.container main .navigation div.settings ul li a {
+    opacity: 1;
+}
+
+.container main .navigation div.settings ul li a:hover {
+    color: #b1b1b1;
+}
+
+.container main .friend {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+    padding: 5px 0;
+    overflow: hidden;
+}
+
+.container main .friend input#search {
+    width: 40%;
+    height: 20px;
+    font-size: 14px;
+}
+
+.container main .friend div {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    margin-top: 10px;
+}
+
+.container main .friend div::-webkit-scrollbar {
+    display: none;
+}
+
+.container main .friend div table {
+    width: 80%;
+    height: 1%;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    position: relative;
+    left: 6.5%;
+    box-sizing: border-box;
+}
+
+.container main .friend div table tr td {
+    font-size: 18px;
+    overflow: hidden;
+}
+
+.container main .friend div table tr td.online span {
+    color: green;
+}
+
+.container main .friend div table tr td.offline span {
+    color: red;
+}
+
+.container main .friend div table tr .button input {
+    width: 55%;
+    height: 35px;
+    color: #e0e0e0;
+    background-color: rgb(46, 46, 46);
+    border: none;
+    font-size: 16px;
+}
+
+.container main .friend div table tr .button input:hover {
+    cursor: pointer;
+    background-color: rgb(145, 145, 145);
+}

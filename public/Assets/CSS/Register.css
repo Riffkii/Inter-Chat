@@ -1,0 +1,75 @@
+body {
+    background-color: #bdbdbd;
+}
+
+.container {
+    width: 28%;
+    background-color: #e0e0e0;
+    border-radius: 40px;
+    margin: 180px auto;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 10px black;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.container header {
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+    margin-bottom: 13px;
+    background-color: rgb(46, 46, 46);
+}
+
+.container header h2 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 40px;
+    font-weight: 600;
+    margin: 5px;
+    color: #e0e0e0;
+}
+
+.container main form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.container main form .text {
+    margin: 8px;
+    width: 60%;
+    height: 25px;
+    font-size: 17px;
+}
+
+.container main form .submit {
+    width: 30%;
+    height: 35px;
+    color: #e0e0e0;
+    background-color: rgb(46, 46, 46);
+    border: none;
+    margin-top: 15px;
+    font-size: 20px;
+}
+
+.container main form .submit:hover {
+    cursor: pointer;
+    background-color: rgb(145, 145, 145);
+}
+
+.container main form .error-invisible {
+    color: #e0e0e0;
+}
+
+.container footer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.container footer p a {
+    text-decoration: none;
+    color: blue;
+}

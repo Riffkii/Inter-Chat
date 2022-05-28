@@ -5,68 +5,77 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $model['title'] ?></title>
+    <link rel="stylesheet" href="/Assets/CSS/Reset.css">
 </head>
 <body>
-    <h1><?= $model['h1'] ?></h1>
-    <br>
-
-    <table id="notif">
-        
-    </table>
-
+    <div class="container">
+        <header>
+            <h2><?= $model['h1'] ?></h2>
+        </header>
+        <main>
+            <table id="notif"></table>
+        </main>
+    </div>
     <script>
         function getData() {
             fetch('/user/notifications', {method: "GET"})
                 .then(response => response.json())
                 .then(datas => {
                     const table = document.getElementById('notif');
+                    const ids = [];
                     for (const data of datas) {
-                    const message = data.message;
-                    const id = data.messageFrom;
-                    
-                    const row = document.createElement('tr');
-                    const messageData = document.createElement('td');
-                    messageData.innerText = message;
-                    row.appendChild(messageData);
+                        const message = data.message;
+                        const id = data.messageFrom;
+                        
+                        const row = document.createElement('tr');
+                        const messageData = document.createElement('td');
+                        messageData.innerText = message;
+                        row.appendChild(messageData);
 
-                    const buttonData = document.createElement('td');
-                    buttonData.class = 'button';
-                    const button = document.createElement('input');
-                    button.type = 'button';
-                    button.id = id;
-                    button.value = 'Accept';
-                    buttonData.appendChild(button);
-                    row.appendChild(buttonData);
+                        const buttonData = document.createElement('td');
+                        buttonData.className = 'button';
+                        const button = document.createElement('input');
+                        button.type = 'button';
+                        button.id = id;
+                        button.value = 'Accept';
+                        buttonData.appendChild(button);
+                        row.appendChild(buttonData);
 
-                    table.appendChild(row);
+                        table.appendChild(row);
 
-                    return data.id;
-                }
-                })
-                .then(id => {
-                    const rows = document.querySelectorAll("td");
-                    for (const row of rows) {
-                        row.firstChild.onclick = function () {
-                        row.firstChild.value = "Accepted";
-
-                        //path (/user/add-friend) ngetrigger method postAddFriend
-                        const request = new Request("/user/add-friend", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                                "Accept": "application/json"
-                            },
-                            body: JSON.stringify({
-                                target: row.firstChild.id,
-                                id: id
-                            })
-                        });
-
-                        fetch(request);
-                        document.getElementById('notif').removeChild(row.parentNode);
-                        }
+                        ids.push(data.id);
                     }
+
+                    return ids;
                 })
+                .then(ids => {
+                    let counter = 0;
+                    const rows = document.querySelectorAll(".button");
+                    console.log(ids);
+                    for (const row of rows) {
+                        const id = ids[counter];
+                        console.log(counter);
+
+                        row.firstChild.onclick = function () {
+                            console.log(`index saat klik = ${counter}`);
+                            row.firstChild.value = "Accepted";
+
+                            fetch("/user/add-friend", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "Accept": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    target: row.firstChild.id,
+                                    id: id
+                                })
+                            });
+                            document.getElementById('notif').removeChild(row.parentNode);
+                        }
+                        counter++;
+                    }
+                });
 
             
         }
@@ -87,52 +96,56 @@
                             .then(datas => {
                                 const table = document.getElementById('notif');
                                 for (const data of datas) {
-                                const message = data.message;
-                                const id = data.messageFrom;
-                                
-                                const row = document.createElement('tr');
-                                const messageData = document.createElement('td');
-                                messageData.innerText = message;
-                                row.appendChild(messageData);
+                                    const message = data.message;
+                                    const id = data.messageFrom;
+                                    
+                                    const row = document.createElement('tr');
+                                    const messageData = document.createElement('td');
+                                    messageData.innerText = message;
+                                    row.appendChild(messageData);
 
-                                const buttonData = document.createElement('td');
-                                buttonData.class = 'button';
-                                const button = document.createElement('input');
-                                button.type = 'button';
-                                button.id = id;
-                                button.value = 'Accept';
-                                buttonData.appendChild(button);
-                                row.appendChild(buttonData);
+                                    const buttonData = document.createElement('td');
+                                    buttonData.className = 'button';
+                                    const button = document.createElement('input');
+                                    button.type = 'button';
+                                    button.id = id;
+                                    button.value = 'Accept';
+                                    buttonData.appendChild(button);
+                                    row.appendChild(buttonData);
 
-                                table.appendChild(row);
+                                    table.appendChild(row);
 
-                                return data.id;
-                            }
-                            })
-                            .then(id => {
-                                const rows = document.querySelectorAll("td");
-                                for (const row of rows) {
-                                    row.firstChild.onclick = function () {
-                                    row.firstChild.value = "Accepted";
-
-                                    //path (/user/add-friend) ngetrigger method postAddFriend
-                                    const request = new Request("/user/add-friend", {
-                                        method: "POST",
-                                        headers: {
-                                            "Content-Type": "application/json",
-                                            "Accept": "application/json"
-                                        },
-                                        body: JSON.stringify({
-                                            target: row.firstChild.id,
-                                            id: id
-                                        })
-                                    });
-
-                                    fetch(request);
-                                    document.getElementById('notif').removeChild(row.parentNode);
-                                    }
+                                    return data.id;
                                 }
                             })
+                            .then(ids => {
+                                let counter = 0;
+                                const rows = document.querySelectorAll(".button");
+                                console.log(ids);
+                                for (const row of rows) {
+                                    const id = ids[counter];
+                                    console.log(counter);
+
+                                    row.firstChild.onclick = function () {
+                                        console.log(`index saat klik = ${counter}`);
+                                        row.firstChild.value = "Accepted";
+
+                                        fetch("/user/add-friend", {
+                                            method: "POST",
+                                            headers: {
+                                                "Content-Type": "application/json",
+                                                "Accept": "application/json"
+                                            },
+                                            body: JSON.stringify({
+                                                target: row.firstChild.id,
+                                                id: id
+                                            })
+                                        });
+                                        document.getElementById('notif').removeChild(row.parentNode);
+                                    }
+                                    counter++;
+                                }
+                            });
                     }
             };
         }
