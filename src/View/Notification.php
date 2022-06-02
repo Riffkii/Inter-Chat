@@ -6,8 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $model['title'] ?></title>
     <link rel="stylesheet" href="/Assets/CSS/Reset.css">
+    <link rel="stylesheet" href="/Assets/CSS/Notification.css">
 </head>
 <body>
+    <input type="button" value="Back" class="back">
     <div class="container">
         <header>
             <h2><?= $model['h1'] ?></h2>
@@ -51,15 +53,10 @@
                 .then(ids => {
                     let counter = 0;
                     const rows = document.querySelectorAll(".button");
-                    console.log(ids);
                     for (const row of rows) {
                         const id = ids[counter];
-                        console.log(counter);
 
                         row.firstChild.onclick = function () {
-                            console.log(`index saat klik = ${counter}`);
-                            row.firstChild.value = "Accepted";
-
                             fetch("/user/add-friend", {
                                 method: "POST",
                                 headers: {
@@ -95,6 +92,7 @@
                             .then(response => response.json())
                             .then(datas => {
                                 const table = document.getElementById('notif');
+                                const ids = [];
                                 for (const data of datas) {
                                     const message = data.message;
                                     const id = data.messageFrom;
@@ -115,21 +113,18 @@
 
                                     table.appendChild(row);
 
-                                    return data.id;
+                                    ids.push(data.id);
                                 }
+
+                                return ids;
                             })
                             .then(ids => {
                                 let counter = 0;
                                 const rows = document.querySelectorAll(".button");
-                                console.log(ids);
                                 for (const row of rows) {
                                     const id = ids[counter];
-                                    console.log(counter);
 
                                     row.firstChild.onclick = function () {
-                                        console.log(`index saat klik = ${counter}`);
-                                        row.firstChild.value = "Accepted";
-
                                         fetch("/user/add-friend", {
                                             method: "POST",
                                             headers: {
@@ -150,8 +145,16 @@
             };
         }
 
+        function event() {
+            const back = document.querySelector('.back');
+            back.onclick = () => {
+                window.location.href = '/';
+            };
+        }
+
         getData();
         websocket();
+        event();
     </script>
 </body>
 </html>

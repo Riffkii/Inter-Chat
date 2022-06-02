@@ -5,16 +5,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $model['title'] ?></title>
+    <link rel="stylesheet" href="/Assets/CSS/Reset.css">
+    <link rel="stylesheet" href="/Assets/CSS/Friends.css">
 </head>
 <body>
-    <h1>Friends</h1>
-    <br>
-    <label for="search">Search: <input type="text" autocomplete="off" id="search"></label>
-    <br>
-    <br>
-    <table id="friends" width="200">
-        
-    </table>
+    <input type="button" value="Back" class="back">
+    <div class="container">
+        <header>
+            <h2><?= $model['title'] ?></h2>
+        </header>
+        <main>
+            <div class="search-bar">
+                <input type="text" autocomplete="off" id="search" placeholder="Name">
+            </div>
+            <div class="friends">
+                <table id="friends"></table>
+            </div>
+        </main>
+    </div>
     <script>
         function getData() {
             fetch('/user/show-friends', {method: "GET"})
@@ -92,6 +100,11 @@
                             });
                     });
             }
+
+            const back = document.querySelector('.back');
+            back.onclick = () => {
+                window.location.href = '/';
+            };
         }
 
         function unfriend() {
@@ -100,8 +113,6 @@
             console.log(rows);
             for (const row of rows) {
                 row.firstChild.onclick = function () {
-                    row.firstChild.disabled = "true";
-
                     fetch('/user/unfriend', {
                         method: "POST",
                         headers: {
@@ -110,9 +121,10 @@
                         },
                         body: JSON.stringify({
                             target: row.firstChild.id ,
-                            message: " sending unfriend request"
                         })
                     });
+
+                    document.getElementById('friends').removeChild(row.parentNode);
                 }
             }
         }

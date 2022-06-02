@@ -1,0 +1,143 @@
+body {
+    background-color: #bdbdbd;
+    overflow: hidden;
+}
+
+.back {
+    margin: 15px;
+    width: 5%;
+    height: 27px;
+    color: #e0e0e0;
+    background-color: rgb(46, 46, 46);
+    border: none;
+    font-size: 18px;
+}
+
+.back:hover {
+    cursor: pointer;
+    background-color: rgb(145, 145, 145);
+}
+
+.container {
+    width: 38%;
+    height: 49vh;
+    background-color: #e0e0e0;
+    border-radius: 40px;
+    margin: 130px auto;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 10px black;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.container header {
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+    margin-bottom: 13px;
+    background-color: rgb(46, 46, 46);
+}
+
+.container header h2 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 40px;
+    font-weight: 600;
+    margin: 5px;
+    color: #e0e0e0;
+}
+
+.container main {
+    height: 38.2vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container main .search-bar {
+    width: 100%;
+    margin-bottom: 2%;
+}
+
+.container main .search-bar form {
+    display: flex;
+    justify-content: center;
+    column-gap: 2%;
+}
+
+.container main .search-bar form input.text {
+    width: 30%;
+    height: 20px;
+    font-size: 16px;
+}
+
+.container main .search-bar form input.submit {
+    width: 10%;
+    height: 27px;
+    color: #e0e0e0;
+    background-color: rgb(46, 46, 46);
+    border: none;
+    font-size: 16px;
+    border-radius: 10px;
+}
+
+.container main .search-bar form input.submit:hover {
+    cursor: pointer;
+    background-color: rgb(145, 145, 145);
+}
+
+.container main .users {
+    height: 81%;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+.container main .users table {
+    width: 100%;
+    height: 1%;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    box-sizing: border-box;
+    position: relative;
+    left: 5.3%;
+}
+
+.container main .users table tr td:first-child {
+    font-size: 18px;
+    width: 60%;
+}
+
+.container main .users table tr .button {
+    width: 72%;
+    display: flex;
+    justify-content: center;
+}
+
+.container main .users table tr .button input {
+    width: 40%;
+    height: 32px;
+    color: #e0e0e0;
+    background-color: rgb(46, 46, 46);
+    border: none;
+    font-size: 18px;
+}
+
+.container main .users table tr .button input.sending {
+    width: 100%;
+    height: 32px;
+    color: #e0e0e0;
+    background-color: rgb(180, 180, 180);
+    border: none;
+    font-size: 18px;
+}
+
+.container main .users table tr .button input:hover {
+    cursor: pointer;
+    background-color: rgb(145, 145, 145);
+}
+
+.container main .users table tr .button input.sending:hover {
+    cursor: default;
+    background-color: rgb(180, 180, 180);
+}

@@ -15,7 +15,6 @@ use Web\InterChat\Service\SessionService;
 use Web\InterChat\Repository\UserRepository;
 use Web\InterChat\Repository\NotificationRepository;
 use Web\InterChat\Model\Request\FindFriendRequest;
-use phpDocumentor\Reflection\Types\This;
 use Web\InterChat\Model\Request\UnfriendRequest;
 
 class FriendshipController {
@@ -35,7 +34,7 @@ class FriendshipController {
 
     public function findFriend() {
         View::render('FindFriend', [
-            'title' => 'Inter Chat'
+            'title' => 'Find Friend'
         ]);
     }
 
@@ -48,7 +47,7 @@ class FriendshipController {
 
             $notifications = $this->notificationService->showUsernameByMF();
             View::render('FindFriend', [
-                'title' => 'Inter Chat',
+                'title' => 'Find Friend',
                 'data' => $data->getNotFriends(),
                 'check' => $notifications
             ]);

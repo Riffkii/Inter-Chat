@@ -20,7 +20,7 @@
                 <img src="/Assets/Helper/Image/settings.png" alt="settings">
                 <div>
                     <ul>
-                        <li><a href="/user/find-friend">Search Friend</a></li>
+                        <li><a href="/user/find-friend">Find Friend</a></li>
                         <li><a href="/user/friends">Friends</a></li>
                     </ul>
                 </div>
