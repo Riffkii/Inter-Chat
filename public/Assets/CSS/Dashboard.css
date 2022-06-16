@@ -1,10 +1,13 @@
 body {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: #bdbdbd;
 }
 
 .container {
-    width: 34%;
-    height: 62vh;
+    width: 458.65px;
     background-color: #e0e0e0;
     border-radius: 40px;
     margin: 110px auto;
@@ -41,17 +44,44 @@ body {
     width: 78%;
     display: flex;
     justify-content: space-around;
+    align-items: center;
     position: relative;
 }
 
 .container main .navigation img {
     z-index: 20;
-    width: 9%;
+    width: 11%;
     transition: 0.3s;
     cursor: pointer;
 }
 
-.container main .navigation img:nth-child(1):active {
+.container main .navigation div:nth-child(1) {
+    position: relative;
+    z-index: 20;
+    width: 11%;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.container main .navigation div:nth-child(1) img {
+    width: 100%;
+}
+
+.container main .navigation div:nth-child(1) div.inv {
+    display: none;
+}
+
+.container main .navigation div:nth-child(1) div.visible {
+    width: 30%;
+    height: 30%;
+    border-radius: 50%;
+    position: absolute;
+    background-color: red;
+    top: 5%;
+    left: 50%;
+}
+
+.container main .navigation div:nth-child(1):active {
     transform: scale(0.7);
 }
 
@@ -144,7 +174,7 @@ body {
 }
 
 .container main .friend div {
-    height: 100%;
+    height: 300px;
     display: flex;
     justify-content: center;
     overflow-y: scroll;
@@ -158,7 +188,7 @@ body {
 
 .container main .friend div table {
     width: 80%;
-    height: 1%;
+    height: 1px;
     table-layout: fixed;
     border-collapse: separate;
     border-spacing: 0 10px;

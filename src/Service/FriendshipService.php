@@ -112,6 +112,18 @@ class FriendshipService {
         }
     }
 
+    public function showFriendsWithoutCookie(string $username): array {
+        try {
+            Database::startTransaction();
+            $friends = $this->friendshipRepository->findFriendsByUsername($username);
+            Database::commit();
+            return $friends;
+        } catch (Exception | Error $e) {
+            Database::rollback();
+            throw $e;
+        }
+    }
+
     public function findOnlineFriends(): array|null {
         try {
             Database::startTransaction();

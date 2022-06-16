@@ -1,13 +1,16 @@
 body {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: #bdbdbd;
 }
 
 .container {
-    width: 37%;
-    height: 85vh;
+    width: 499.117px;
+    height: 579.7px;
     background-color: #e0e0e0;
     border-radius: 20px;
-    margin: 45px auto;
     display: flex;
     flex-direction: column;
     box-shadow: 0 0 10px black;
@@ -57,13 +60,34 @@ body {
     scrollbar-width: none;
 }
 
-.container main p {
+.container main p.in {
+    display: none;
+}
+
+.container main p.visible {
+    position: fixed;
+    top: 77%;
+    font-size: 18px;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.container main p.visible:hover {
+    cursor: pointer;
+}
+
+.container main p.visible span {
+    color: red;
+}
+
+.container main .chat p {
     word-break: break-word;
     /* overflow-wrap: anywhere; */
     white-space: normal;
 }
 
-.container main .another-user {
+.container main .chat .another-user {
     width: fit-content;
     max-width: 80%;
     color: #161616;
@@ -74,7 +98,7 @@ body {
     margin-bottom: 15px;
 }
 
-.container main .user {
+.container main .chat .user {
     width: fit-content;
     max-width: 80%;
     color: #e4e4e4;

@@ -1,9 +1,27 @@
 body {
     height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     background-color: #bdbdbd;
+}
+
+.back {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 68.3px;
+    height: 27px;
+    color: #e0e0e0;
+    background-color: rgb(46, 46, 46);
+    border: none;
+    font-size: 18px;
+}
+
+.back:hover {
+    cursor: pointer;
+    background-color: rgb(145, 145, 145);
 }
 
 .container {
@@ -64,15 +82,4 @@ body {
 
 .container main form .error-invisible {
     color: #e0e0e0;
-}
-
-.container footer {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 15px;
-}
-
-.container footer p a {
-    text-decoration: none;
-    color: blue;
 }
